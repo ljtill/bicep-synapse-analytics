@@ -8,6 +8,8 @@ targetScope = 'resourceGroup'
 // Resources
 // ---------
 
+// Storage Accounts
+
 resource storage 'Microsoft.Storage/storageAccounts@2022-05-01' = {
   name: lifecycle.resourceName
   location: config.location
@@ -19,6 +21,8 @@ resource storage 'Microsoft.Storage/storageAccounts@2022-05-01' = {
     isHnsEnabled: true
   }
 }
+
+// Synapse Workspaces
 
 resource workspace 'Microsoft.Synapse/workspaces@2021-06-01' = {
   name: lifecycle.resourceName
@@ -36,6 +40,16 @@ resource workspace 'Microsoft.Synapse/workspaces@2021-06-01' = {
     }
   }
 }
+resource workspaceRule 'Microsoft.Synapse/workspaces/firewallRules@2021-06-01' = {
+  parent: workspace
+  name: 'default'
+  properties: {
+    startIpAddress: config.clientAddress
+    endIpAddress: config.clientAddress
+  }
+}
+
+// Key Vaults
 
 resource vault 'Microsoft.KeyVault/vaults@2022-07-01' = {
   name: lifecycle.resourceName
