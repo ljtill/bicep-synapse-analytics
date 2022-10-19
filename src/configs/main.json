@@ -1,9 +1,18 @@
 {
     "location": "",
     "subscription": "",
-    "resourceGroup": "",
-    "resources": {
-        "name": ""
-    },
-    "tags": {}
+    "resourceGroup": "Data",
+    "lifecycles": [
+        {
+            "resourceName": "",
+            "managedResourceGroup": "Data-Sandbox"
+        },
+        {
+            "resourceName": "",
+            "managedResourceGroup": "Data-Production"
+        }
+    ],
+    "tags": {
+        "Service": "Synapse"
+    }
 }
