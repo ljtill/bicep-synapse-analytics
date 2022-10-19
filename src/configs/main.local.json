@@ -1,14 +1,14 @@
 {
-    "location": "",
-    "subscription": "",
+    "location": "uksouth",
+    "subscription": "78ef0705-dafd-4402-a4bd-00b9cb197cf0",
     "resourceGroup": "Data",
     "lifecycles": [
         {
-            "resourceName": "",
+            "resourceName": "mscaed",
             "managedResourceGroup": "Data-Sandbox"
         },
         {
-            "resourceName": "",
+            "resourceName": "mscaep",
             "managedResourceGroup": "Data-Production"
         }
     ],

@@ -4,9 +4,19 @@
 
 targetScope = 'resourceGroup'
 
-// ---------
-// Resources
-// ---------
+// -------
+// Modules
+// -------
+
+// Sandbox
+
+module resources 'resources.env.bicep' = [for (lifecycle, count) in config.lifecycles: {
+  name: 'Microsoft.Resources.Environment.${count}'
+  params: {
+    config: config
+    lifecycle: lifecycle
+  }
+}]
 
 // ---------
 // Variables
