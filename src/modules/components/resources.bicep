@@ -10,22 +10,18 @@ targetScope = 'resourceGroup'
 
 // Sandbox
 
-module resources 'resources.env.bicep' = [for (lifecycle, count) in config.lifecycles: {
+module resources 'resources.env.bicep' = [for (environment, count) in settings.environments: {
   name: 'Microsoft.Resources.Environment.${count}'
   params: {
-    config: config
-    lifecycle: lifecycle
+    defaults: defaults
+    settings: settings
+    environment: environment
   }
 }]
-
-// ---------
-// Variables
-// ---------
-
-var defaults = loadJsonContent('../../defaults.json')
 
 // ----------
 // Parameters
 // ----------
 
-param config object
+param defaults object
+param settings object

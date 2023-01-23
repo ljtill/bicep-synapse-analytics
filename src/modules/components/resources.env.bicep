@@ -11,8 +11,8 @@ targetScope = 'resourceGroup'
 // Storage Accounts
 
 resource storage 'Microsoft.Storage/storageAccounts@2022-05-01' = {
-  name: lifecycle.resourceName
-  location: config.location
+  name: environment.resources.storageAccount.name
+  location: settings.resourceGroup.location
   sku: {
     name: 'Standard_RAGRS'
   }
@@ -38,14 +38,14 @@ resource container 'Microsoft.Storage/storageAccounts/blobServices/containers@20
 // Synapse Workspaces
 
 resource workspace 'Microsoft.Synapse/workspaces@2021-06-01' = {
-  name: lifecycle.resourceName
-  location: config.location
+  name: environment.resources.synapseWorkspace.name
+  location: settings.resourceGroup.location
   identity: {
     type: 'SystemAssigned'
   }
   properties: {
     azureADOnlyAuthentication: true
-    managedResourceGroupName: lifecycle.managedResourceGroup
+    managedResourceGroupName: environment.managedResourceGroup.name
     defaultDataLakeStorage: {
       resourceId: storage.id
       accountUrl: storage.properties.primaryEndpoints.dfs
@@ -65,8 +65,8 @@ resource workspaceRule 'Microsoft.Synapse/workspaces/firewallRules@2021-06-01' =
 // Key Vaults
 
 resource vault 'Microsoft.KeyVault/vaults@2022-07-01' = {
-  name: lifecycle.resourceName
-  location: config.location
+  name: environment.resources.keyVault.name
+  location: settings.resourceGroup.location
   properties: {
     sku: {
       family: 'A'
@@ -81,22 +81,25 @@ resource vault 'Microsoft.KeyVault/vaults@2022-07-01' = {
 
 // Role Assignments
 
+// NOTE: Storage Blob Data Contributor
 resource storageAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
   name: guid(storage.name, 'Storage')
   scope: storage
   properties: {
     principalType: 'ServicePrincipal'
     principalId: workspace.identity.principalId
-    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe') // NOTE: Storage Blob Data Contributor
+    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')
   }
 }
+
+// NOTE: Contributor
 resource groupAssignment 'Microsoft.Authorization/roleAssignments@2020-08-01-preview' = {
   name: guid(workspace.name, 'Synapse')
   scope: workspace
   properties: {
     principalType: 'ServicePrincipal'
     principalId: workspace.identity.principalId
-    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'b24988ac-6180-42a0-ab88-20f7382dd24c') // NOTE: Contributor
+    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'b24988ac-6180-42a0-ab88-20f7382dd24c')
   }
 }
 
@@ -104,5 +107,6 @@ resource groupAssignment 'Microsoft.Authorization/roleAssignments@2020-08-01-pre
 // Parameters
 // ----------
 
-param config object
-param lifecycle object
+param defaults object
+param settings object
+param environment object
