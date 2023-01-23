@@ -10,7 +10,7 @@ targetScope = 'subscription'
 
 module groups './modules/groups/resources.bicep' = {
   name: 'Microsoft.Resources'
-  scope: subscription(settings.subscription)
+  scope: subscription(settings.subscriptionId)
   params: {
     defaults: defaults
     settings: settings
