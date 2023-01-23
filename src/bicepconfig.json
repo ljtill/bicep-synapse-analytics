@@ -4,7 +4,7 @@
             "enabled": true,
             "verbose": false,
             "rules": {
-                "no-unused-vars": {
+                "no-unused-params": {
                     "level": "off"
                 }
             }
