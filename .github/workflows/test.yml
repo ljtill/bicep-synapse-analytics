@@ -1,11 +1,9 @@
-name: "Deploy"
+name: "Test"
 
 on:
-  push:
-    branches:
-      - "main"
-    paths:
-      - "src/**"
+  workflow_dispatch:
+  pull_request:
+    branches: 'main'
 
 permissions:
   id-token: write
@@ -23,13 +21,14 @@ jobs:
       - name: Login
         uses: azure/login@v1
         with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          client-id: ${{ secrets.AZURE_CLIENT_ID}}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Deploy
+      - name: Validate
         run: |
-          az deployment sub create \
+          az deployment sub what-if \
             --name "GitHub.Actions" \
             --location "uksouth" \
-            --template-file ./src/main.bicep
+            --template-file ./src/main.bicep \
+            --parameters @./src/parameters/main.json
