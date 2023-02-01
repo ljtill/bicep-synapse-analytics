@@ -15,7 +15,7 @@ Before deploying the Azure Synapse resources, the parameters file `src/parameter
 #### Using locally with Azure CLI
 
 ```bash
-az deployment sub validate \
+az deployment sub create \
     --name 'Microsoft.Bicep' \
     --location 'uksouth' \
     --template-file './src/main.bicep' \
